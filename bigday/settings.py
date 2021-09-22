@@ -72,6 +72,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bigday.wsgi.application'
 
+# per https://docs.djangoproject.com/en/3.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
