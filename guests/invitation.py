@@ -1,6 +1,6 @@
 from email.mime.image import MIMEImage
 import os
-from datetime import datetime
+from django.utils import timezone
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.urls import reverse
@@ -76,5 +76,5 @@ def send_all_invitations(test_only, mark_as_sent):
     for party in to_send_to:
         send_invitation_email(party, test_only=test_only)
         if mark_as_sent:
-            party.invitation_sent = datetime.now()
+            party.invitation_sent = timezone.now()
             party.save()

@@ -2,7 +2,7 @@ from __future__ import unicode_literals, print_function
 from copy import copy
 from email.mime.image import MIMEImage
 import os
-from datetime import datetime
+from django.utils import timezone
 import random
 
 from django.conf import settings
@@ -64,7 +64,7 @@ def send_all_save_the_dates(test_only=False, mark_as_sent=False):
         if send_save_the_date_to_party(party, test_only=test_only):
             # only mark as sent if there were email addresses
             if mark_as_sent:
-                party.save_the_date_sent = datetime.now()
+                party.save_the_date_sent = timezone.now()
                 party.save()
 
 
