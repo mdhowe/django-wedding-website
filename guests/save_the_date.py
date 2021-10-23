@@ -61,10 +61,11 @@ SAVE_THE_DATE_CONTEXT_MAP = {
 def send_all_save_the_dates(test_only=False, mark_as_sent=False):
     to_send_to = Party.in_default_order().filter(is_invited=True, save_the_date_sent=None)
     for party in to_send_to:
-        send_save_the_date_to_party(party, test_only=test_only)
-        if mark_as_sent:
-            party.save_the_date_sent = datetime.now()
-            party.save()
+        if send_save_the_date_to_party(party, test_only=test_only):
+            # only mark as sent if there were email addresses
+            if mark_as_sent:
+                party.save_the_date_sent = datetime.now()
+                party.save()
 
 
 def send_save_the_date_to_party(party, test_only=False):
@@ -72,8 +73,9 @@ def send_save_the_date_to_party(party, test_only=False):
     recipients = party.guest_emails
     if not recipients:
         print('===== WARNING: no valid email addresses found for {} ====='.format(party))
+        return False
     else:
-        send_save_the_date_email(
+        return send_save_the_date_email(
             context,
             recipients,
             test_only=test_only
@@ -139,6 +141,8 @@ def send_save_the_date_email(context, recipients, test_only=False):
     print('sending {} to {}'.format(context['name'], ', '.join(recipients)))
     if not test_only:
         msg.send()
+
+    return True
 
 
 def clear_all_save_the_dates():
